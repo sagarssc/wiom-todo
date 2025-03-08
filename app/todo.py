@@ -13,12 +13,20 @@ class Todo(Mysql):
         return
     
     def get_task(self):
-        result = self.get("tasks")
+        status = self.data.get("status")
+        if status:
+            result = self.get("tasks", {"status":status})
+        else:
+            result = self.get("tasks")
         return result
     
     def get_subtasks(self):
+        status = self.data.get("status")
         task_id = self.data.get("task_id")
-        result = self.get("sub_tasks", {"task_id": task_id})
+        if status:
+            result = self.get("sub_tasks", {"task_id": task_id, "status":status})
+        else:
+            result = self.get("sub_tasks", {"task_id": task_id})
         return result
     
     def delete_task(self):

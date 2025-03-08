@@ -11,12 +11,20 @@ def create_task():
 
 @app.route('/tasks', methods = ['GET'])
 def get_tasks():
-    data = Todo().get_task()
+    status = request.args.get("status")
+    if status:
+        data = Todo({"status": status}).get_task()
+    else:
+        data = Todo().get_task()
     return {"success": True, "tasks": data}, 200
 
 @app.route('/tasks/<task_id>', methods = ['GET'])
 def get_sub_tasks(task_id):
-    data = Todo({"task_id":task_id}).get_subtasks()
+    status = request.args.get("status")
+    if status:
+        data = Todo({"status": status}).get_subtasks()
+    else:
+        data = Todo().get_subtasks()
     return {"success": True, "tasks": data}, 200
 
 @app.route('/tasks/<task_id>', methods = ['DELETE'])
