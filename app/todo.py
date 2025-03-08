@@ -60,4 +60,11 @@ class Todo(Mysql):
         task_id = self.data.pop("task_id")
         subtask_id = self.data.pop("subtask_id")
         self.update("sub_tasks", self.data, {"id": subtask_id, "task_id": task_id})
+        self.mark_task_status_complete(task_id)
+        return
+    
+    def mark_task_status_complete(self,task_id):
+        result = self.get("sub_tasks", {"task_id": task_id, "status":"pending"})
+        if not result:
+            self.update("tasks", {"status":"Completed"}, {"id": task_id})
         return
