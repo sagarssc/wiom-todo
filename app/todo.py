@@ -27,7 +27,12 @@ class Todo(Mysql):
             result = self.get("sub_tasks", {"task_id": task_id, "status":status})
         else:
             result = self.get("sub_tasks", {"task_id": task_id})
-        return result
+        total = len(result)
+        comleted = len([task for task in result if task["status"].lower()=="completed"])
+        comleted_percent = 0
+        if total and comleted:
+            comleted_percent = (comleted / total) * 100
+        return {"tasks": result, "completed": comleted_percent}
     
     def delete_task(self):
         task_id = self.data.get("task_id")
